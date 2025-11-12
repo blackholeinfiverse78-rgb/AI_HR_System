@@ -1,0 +1,2 @@
+timestamp,candidate_id,score,comment,outcome,event
+2024-01-25T10:00:00,1,4,"Initial feedback logged",accept,feedback_processed
