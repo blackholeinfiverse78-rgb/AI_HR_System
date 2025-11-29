@@ -8,13 +8,17 @@ python-multipart==0.0.6
 # Data Processing
 pandas==2.1.3
 numpy==1.25.2
+<<<<<<< HEAD
 plotly==5.17.0
 scikit-learn==1.3.2
+=======
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6
 
 # HTTP & API
 requests==2.31.0
 
 # Configuration
+<<<<<<< HEAD
 python-dotenv==1.0.0
 
 # Security & Authentication
@@ -32,3 +36,6 @@ schedule==1.2.0
 
 # Logging & Monitoring
 watchdog==3.0.0
+=======
+python-dotenv==1.0.0
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6

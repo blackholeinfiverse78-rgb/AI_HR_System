@@ -1,13 +1,20 @@
+<<<<<<< HEAD
 from fastapi import FastAPI, HTTPException, Depends, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer
 from app.models import CandidateCreate, FeedbackCreate, AutomationTrigger
 from app.routers import trigger, candidate, feedback, analytics, smart_features, integration
+=======
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from app.models import CandidateCreate, FeedbackCreate, AutomationTrigger
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6
 from app.agents.email_agent import send_email
 from app.agents.whatsapp_agent import send_whatsapp
 from app.agents.voice_agent import trigger_voice_call
 from app.utils.helpers import load_json, save_json
 from app.utils.data_validator import ensure_data_integrity
+<<<<<<< HEAD
 from app.utils.database import db_manager
 from app.utils.security import SecurityManager, get_cors_origins
 from app.utils.backup_manager import backup_manager
@@ -56,10 +63,26 @@ try:
     
 except Exception as e:
     logger.error(f"System initialization failed: {e}")
+=======
+import logging
+from datetime import datetime
+
+# Setup logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Initialize data validation on startup
+try:
+    validation_result = ensure_data_integrity()
+    logger.info(f"Data validation completed: {validation_result}")
+except Exception as e:
+    logger.error(f"Data validation failed: {e}")
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6
     raise
 
 app = FastAPI(
     title="HR-AI System", 
+<<<<<<< HEAD
     version="2.0.0", 
     description="Production-ready AI-powered HR automation with multi-channel communication, security, and performance monitoring"
 )
@@ -87,6 +110,20 @@ app.add_middleware(
 # Security setup
 security = HTTPBearer(auto_error=False)
 
+=======
+    version="1.0.0", 
+    description="AI-powered HR automation with multi-channel communication"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6
 @app.get("/")
 def root():
     return {
@@ -100,6 +137,7 @@ def health():
     try:
         from app.utils.data_validator import DataValidator
         system_status = DataValidator.get_system_status()
+<<<<<<< HEAD
         performance_summary = performance_monitor.get_performance_summary()
         
         # Database health check
@@ -107,10 +145,16 @@ def health():
         
         return {
             "status": performance_summary.get("health_status", "healthy"), 
+=======
+        
+        return {
+            "status": "healthy", 
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6
             "timestamp": datetime.now().isoformat(),
             "data_files": system_status["data_files"],
             "directories": system_status["directories"],
             "permissions": system_status["permissions"],
+<<<<<<< HEAD
             "database": {
                 "status": "connected",
                 "stats": db_stats
@@ -120,10 +164,13 @@ def health():
                 "memory_percent": performance_summary["metrics"]["current"]["memory_percent"],
                 "response_time_ms": performance_summary["metrics"]["current"]["response_time_ms"]
             },
+=======
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6
             "pipelines": {
                 "email": "active",
                 "whatsapp": "active", 
                 "voice": "active"
+<<<<<<< HEAD
             },
             "issues": performance_summary.get("issues", []),
             "recommendations": performance_summary.get("recommendations", [])
@@ -131,6 +178,12 @@ def health():
     except Exception as e:
         logger.error(f"Health check failed: {e}")
         db_manager.log_system_event("ERROR", "health_check_failed", str(e))
+=======
+            }
+        }
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6
         raise HTTPException(status_code=500, detail=f"System health check failed: {str(e)}")
 
 @app.get("/system/status")
@@ -157,6 +210,7 @@ def system_status():
 
 # Candidate endpoints
 @app.post("/candidate/add")
+<<<<<<< HEAD
 def add_candidate(candidate: CandidateCreate, request: Request):
     try:
         # Enhanced candidate creation with database backend
@@ -178,10 +232,15 @@ def add_candidate(candidate: CandidateCreate, request: Request):
         )
         
         # Also maintain JSON compatibility
+=======
+def add_candidate(candidate: CandidateCreate):
+    try:
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6
         candidates = load_json("data/candidates.json")
         if not isinstance(candidates, list):
             candidates = []
         
+<<<<<<< HEAD
         candidate_dict["id"] = candidate_id
         candidates.append(candidate_dict)
         save_json("data/candidates.json", candidates)
@@ -195,6 +254,18 @@ def add_candidate(candidate: CandidateCreate, request: Request):
     except Exception as e:
         logger.error(f"Failed to add candidate: {e}")
         db_manager.log_system_event("ERROR", "candidate_add_failed", str(e))
+=======
+        candidate_id = max([c.get("id", 0) for c in candidates], default=0) + 1
+        candidate_dict = candidate.dict()
+        candidate_dict["id"] = candidate_id
+        candidate_dict["match_score"] = 0.0
+        
+        candidates.append(candidate_dict)
+        save_json("data/candidates.json", candidates)
+        
+        return {"status": "success", "candidate_id": candidate_id, "message": "Candidate added successfully"}
+    except Exception as e:
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6
         raise HTTPException(status_code=400, detail=str(e))
 
 @app.get("/candidate/list")
@@ -215,6 +286,7 @@ def get_candidate(candidate_id: int):
 
 # Feedback endpoints
 @app.post("/feedback/hr_feedback")
+<<<<<<< HEAD
 def submit_feedback(feedback: FeedbackCreate, request: Request):
     try:
         # Enhanced feedback submission with database backend
@@ -242,6 +314,25 @@ def submit_feedback(feedback: FeedbackCreate, request: Request):
         # Maintain CSV compatibility
         import csv
         import os
+=======
+def submit_feedback(feedback: FeedbackCreate):
+    try:
+        import csv
+        import os
+        
+        # Validate candidate exists
+        candidates = load_json("data/candidates.json")
+        if not isinstance(candidates, list):
+            raise HTTPException(status_code=400, detail="Invalid candidates data")
+        
+        candidate = next((c for c in candidates if c.get("id") == feedback.candidate_id), None)
+        if not candidate:
+            raise HTTPException(status_code=404, detail="Candidate not found")
+        
+        timestamp = datetime.now().isoformat()
+        
+        # Log to CSV file
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6
         csv_file = "feedback/feedback_log.csv"
         file_exists = os.path.exists(csv_file)
         
@@ -254,8 +345,14 @@ def submit_feedback(feedback: FeedbackCreate, request: Request):
                                feedback.comment, feedback.actual_outcome, "feedback_processed"])
         except Exception as csv_error:
             logger.error(f"CSV logging failed: {csv_error}")
+<<<<<<< HEAD
         
         # Maintain JSON compatibility
+=======
+            # Continue with JSON logging as fallback
+        
+        # Also log to JSON for backward compatibility
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6
         log_entry = {
             "timestamp": timestamp,
             "candidate_id": feedback.candidate_id,
@@ -265,6 +362,10 @@ def submit_feedback(feedback: FeedbackCreate, request: Request):
             "event": "feedback_processed"
         }
         
+<<<<<<< HEAD
+=======
+        # Log to system log
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6
         system_logs = load_json("feedback/system_log.json")
         if not isinstance(system_logs, list):
             system_logs = []
@@ -279,7 +380,11 @@ def submit_feedback(feedback: FeedbackCreate, request: Request):
         return {
             "status": "success", 
             "message": "Feedback submitted successfully",
+<<<<<<< HEAD
             "feedback_id": feedback_id,
+=======
+            "feedback_id": len(system_logs),
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6
             "timestamp": timestamp
         }
         
@@ -287,7 +392,10 @@ def submit_feedback(feedback: FeedbackCreate, request: Request):
         raise
     except Exception as e:
         logger.error(f"Feedback submission failed: {e}")
+<<<<<<< HEAD
         db_manager.log_system_event("ERROR", "feedback_submission_failed", str(e))
+=======
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6
         raise HTTPException(status_code=500, detail=f"Failed to submit feedback: {str(e)}")
 
 @app.get("/feedback/logs")
@@ -384,6 +492,7 @@ def send_whatsapp_only(candidate_id: int, message_type: str = "shortlisted", ove
 @app.post("/communication/voice")
 def trigger_voice_only(candidate_id: int, call_type: str = "onboarding"):
     result = trigger_voice_call(candidate_id, call_type)
+<<<<<<< HEAD
     return {"channel": "voice", "result": result}
 
 # System Management Endpoints
@@ -555,3 +664,6 @@ def get_security_status():
     except Exception as e:
         logger.error(f"Failed to get security status: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+=======
+    return {"channel": "voice", "result": result}
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6

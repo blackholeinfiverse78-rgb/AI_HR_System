@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import pandas as pd
+<<<<<<< HEAD
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
@@ -110,6 +111,34 @@ with st.sidebar:
         st.rerun()
 
 # Function moved above
+=======
+from datetime import datetime
+
+st.set_page_config(page_title="HR-AI Dashboard", layout="wide")
+
+API_BASE = "http://localhost:5000"
+
+st.title("🚀 HR-AI System Dashboard")
+
+# Sidebar
+st.sidebar.header("Navigation")
+page = st.sidebar.selectbox("Choose Page", ["Overview", "Candidates", "Feedback", "Automation"])
+
+def make_api_request(method, endpoint, data=None):
+    try:
+        url = f"{API_BASE}{endpoint}"
+        if method == "GET":
+            response = requests.get(url)
+        elif method == "POST":
+            response = requests.post(url, json=data)
+        
+        if response.status_code == 200:
+            return response.json(), None
+        else:
+            return None, f"API Error: {response.status_code} - {response.text}"
+    except Exception as e:
+        return None, f"Connection Error: {str(e)}"
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6
 
 if page == "Overview":
     st.header("System Overview")
@@ -276,6 +305,7 @@ elif page == "Automation":
             else:
                 st.error(f"Failed to load history: {error}")
 
+<<<<<<< HEAD
 elif page == "Analytics":
     st.header("📊 Analytics Dashboard")
     
@@ -497,3 +527,10 @@ with st.sidebar:
     
     # Last updated timestamp
     st.markdown(f"**🔄 Last Updated:** {datetime.now().strftime('%H:%M:%S')}")
+=======
+# Footer
+st.sidebar.markdown("---")
+st.sidebar.markdown("**HR-AI System v1.0**")
+st.sidebar.markdown("Backend: FastAPI + SQLite")
+st.sidebar.markdown("Frontend: Streamlit")
+>>>>>>> ca18f614930b664ce9fedba6e82a380867881fe6
