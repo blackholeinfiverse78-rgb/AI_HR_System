@@ -11,6 +11,12 @@ def run_tests():
     loader = unittest.TestLoader()
     suite = loader.discover('tests', pattern='test_*.py')
     
+    print("🧪 Running Test Suite:")
+    print("   - test_rl_brain.py (RL functionality)")
+    print("   - test_api.py (API endpoints)")
+    print("   - test_rl_robustness.py (RL stress tests)")
+    print()
+    
     # Run with minimal verbosity
     runner = unittest.TextTestRunner(verbosity=1, stream=sys.stdout)
     result = runner.run(suite)
