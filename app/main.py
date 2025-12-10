@@ -6,9 +6,7 @@ from app.routers import trigger, candidate, feedback, analytics, smart_features,
 try:
     from app.routers import ai_brain
     AI_BRAIN_AVAILABLE = True
-    logger.info("AI Brain router loaded - RL FULLY ACTIVE")
 except ImportError:
-    logger.error("AI Brain router not available - RL features disabled")
     AI_BRAIN_AVAILABLE = False
 from app.agents.email_agent import send_email
 from app.agents.whatsapp_agent import send_whatsapp

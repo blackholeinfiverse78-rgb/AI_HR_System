@@ -17,11 +17,11 @@ router = APIRouter(prefix="/ai", tags=["ai-brain-active-rl"])
 
 # Initialize ACTIVE RL Intelligence Brain
 # In a real app, this should be a singleton dependency
-print("🚀 Initializing ACTIVE RL Intelligence Brain...")
+print("Initializing ACTIVE RL Intelligence Brain...")
 hr_brain = HRIntelligenceBrain()
-print(f"🧠 RL Brain loaded with {len(hr_brain.weights)} skills")
-print(f"⚙️ Learning Rate: {hr_brain.learning_rate}")
-print("✅ RL Status: FULLY ACTIVE")
+print(f"RL Brain loaded with {len(hr_brain.weights)} skills")
+print(f"Learning Rate: {hr_brain.learning_rate}")
+print("RL Status: FULLY ACTIVE")
 
 class DecisionRequest(BaseModel):
     candidate_data: Dict[str, Any]
