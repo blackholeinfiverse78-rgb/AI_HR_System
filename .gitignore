@@ -25,28 +25,48 @@ venv/
 env/
 ENV/
 
-# Environment Variables
-.env
-
-# Database
-data/hr_system.db
-data/*.json
-data/*.csv
-
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 
+# Environment Variables
+.env
+.env.local
+.env.production
+
+# Logs
+logs/*.log
+*.log
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Temporary Files
+*.tmp
+*.temp
+
 # OS
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
-logs/
+# Test Results
+.pytest_cache/
+.coverage
+htmlcov/
+integration_test_results.json
 
-# Temporary files
-temp/
-tmp/
+# Backups
+backups/
+exports/
+uploads/
+
+# Data Files (keep structure, ignore content)
+data/*.json
+!data/.gitkeep
+feedback/*.csv
+feedback/*.json
+!feedback/.gitkeep

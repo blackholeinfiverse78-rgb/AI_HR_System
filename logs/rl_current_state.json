@@ -1,0 +1,15 @@
+{
+  "timestamp": "2025-12-10T10:38:00.284816",
+  "total_weights": 7,
+  "top_weights": {
+    "python": 2.3375,
+    "rl": 1.9960019999999998,
+    "integration": 1.5968015999999998,
+    "testing": 1.3972014,
+    "ai": 1.3375,
+    "fastapi": 1.1563425,
+    "communication": 0.998001
+  },
+  "learning_rate": 0.15,
+  "last_reward": 1.2000000000000002
+}
